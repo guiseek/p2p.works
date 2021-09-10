@@ -4,7 +4,7 @@ export const environment: {
   iceServers: RTCIceServer[];
 } = {
   production: true,
-  signaling: 'http://localhost:3333',
+  signaling: 'https://gateway.p2p.works',
   iceServers: [
     {
       urls: ['stun:54.90.98.123:3478'],

@@ -1,0 +1,51 @@
+:host {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+
+  * {
+    box-sizing: border-box;
+  }
+
+  .whiteboard {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+  }
+
+  .colors {
+    z-index: 10;
+    position: fixed;
+  }
+
+  .color {
+    display: inline-block;
+    height: 48px;
+    width: 48px;
+    margin: 2px;
+    border: 2px #212121 transparent;
+  }
+
+  .color.black {
+    background-color: black;
+  }
+  .color.red {
+    background-color: red;
+  }
+  .color.green {
+    background-color: green;
+  }
+  .color.blue {
+    background-color: blue;
+  }
+  .color.yellow {
+    background-color: yellow;
+  }
+  .color.white {
+    background-color: white;
+  }
+}

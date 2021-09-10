@@ -7,6 +7,11 @@ export type PeerEventMap = {
   track: MediaStreamTrack;
 
   /**
+   * Stream local disponível
+   */
+  stream: MediaStream;
+
+  /**
    * O estado de sinalização mudou. Essa mudança
    * de estado é o resultado de um setLocalDescriptionou
    * de setRemoteDescriptionser invocado.

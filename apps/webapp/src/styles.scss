@@ -28,7 +28,15 @@ $speek-theme: mat.define-light-theme(
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include mat.all-component-themes($speek-theme);
+// @include mat.all-component-themes($speek-theme);
+@include mat.core-theme($speek-theme);
+@include mat.icon-theme($speek-theme);
+@include mat.card-theme($speek-theme);
+@include mat.input-theme($speek-theme);
+@include mat.dialog-theme($speek-theme);
+@include mat.button-theme($speek-theme);
+@include mat.select-theme($speek-theme);
+@include mat.form-field-theme($speek-theme);
 
 html,
 body {

@@ -154,6 +154,9 @@ export class PeerImpl implements Peer {
     return (stream) => {
       this.stream = stream;
 
+      const onStreamEvent = this.events.get('stream');
+      if (onStreamEvent) onStreamEvent(stream);
+
       const [videoTrack] = this.stream.getVideoTracks();
       const [audioTrack] = this.stream.getAudioTracks();
 

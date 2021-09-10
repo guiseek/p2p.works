@@ -14,6 +14,8 @@ import { ConfigComponent } from './config/config.component';
 import { ConfigGuard } from './config/config.guard';
 import { MeetComponent } from './meet.component';
 import { MeetGuard } from './meet.guard';
+import { BoardComponent } from './board/board.component';
+import { BoardDirective } from './board/board.directive';
 
 
 const routes: Routes = [
@@ -23,7 +25,9 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     MeetComponent,
-    ConfigComponent
+    ConfigComponent,
+    BoardComponent,
+    BoardDirective
   ],
   imports: [
     CommonModule,

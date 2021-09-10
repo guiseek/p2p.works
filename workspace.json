@@ -131,7 +131,7 @@
             "polyfills": "apps/webapp/src/polyfills.ts",
             "tsConfig": "apps/webapp/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["apps/webapp/src/favicon.ico", "apps/webapp/src/assets"],
+            "assets": ["apps/webapp/src/favicon.ico", "apps/webapp/src/CNAME", "apps/webapp/src/assets"],
             "styles": ["apps/webapp/src/styles.scss"],
             "scripts": []
           },
@@ -207,9 +207,9 @@
     }
   },
   "cli": {
-    "defaultCollection": "@nrwl/nest"
+    "defaultCollection": "@nrwl/angular"
   },
-  "defaultProject": "gateway",
+  "defaultProject": "webapp",
   "generators": {
     "@nrwl/angular:application": {
       "style": "scss",

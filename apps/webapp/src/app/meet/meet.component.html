@@ -5,6 +5,8 @@
 <mat-card id="local" [ngClass]="{ videoff: peer.uiState.video }">
   <video autoplay playsinline [muted]="true" [srcObject]="peer.stream"></video>
 
+  <canvas #audioCanvas height="15px"> </canvas>
+
   <mat-card-actions>
     <button
       type="button"
@@ -22,12 +24,20 @@
     >
       <mat-icon>{{ peer.uiState.audio ? 'mic_off' : 'mic' }}</mat-icon>
     </button>
+    <button type="button" mat-icon-button (click)="inputFile.click()">
+      <mat-icon>upload</mat-icon>
+    </button>
     <button
       type="button"
       mat-icon-button
-      (click)="inputFile.click()"
+      [color]="recorder?.state !== 'recording' ? 'default' : 'warn'"
+      (click)="record(peer.stream)"
     >
-      <mat-icon>upload</mat-icon>
+      <mat-icon>{{
+        recorder?.state !== 'recording'
+          ? 'radio_button_unchecked'
+          : 'radio_button_checked'
+      }}</mat-icon>
     </button>
   </mat-card-actions>
 </mat-card>
