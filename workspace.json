@@ -1,6 +1,71 @@
 {
   "version": 2,
-  "projects": {},
+  "projects": {
+    "adapters": {
+      "root": "libs/adapters",
+      "sourceRoot": "libs/adapters/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:tsc",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/adapters",
+            "main": "libs/adapters/src/index.ts",
+            "tsConfig": "libs/adapters/tsconfig.lib.json",
+            "assets": ["libs/adapters/*.md"]
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/adapters/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/adapters"],
+          "options": {
+            "jestConfig": "libs/adapters/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "ports": {
+      "root": "libs/ports",
+      "sourceRoot": "libs/ports/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:tsc",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/ports",
+            "main": "libs/ports/src/index.ts",
+            "tsConfig": "libs/ports/tsconfig.lib.json",
+            "assets": ["libs/ports/*.md"]
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/ports/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/ports"],
+          "options": {
+            "jestConfig": "libs/ports/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    }
+  },
   "cli": {
     "defaultCollection": "@nrwl/workspace"
   }
