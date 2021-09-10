@@ -1,16 +1,16 @@
 import {
-  Peer,
-  Socket,
   Callback,
-  Signaling,
-  PeerUiState,
-  PeerEventMap,
-  SignalMessage,
+  Peer,
   PeerEventCallback,
-} from '@webrtc/ports';
+  PeerEventMap,
+  PeerUiState,
+  Signaling,
+  SignalMessage,
+  Socket,
+} from '@speek/ports';
 
 export class PeerImpl implements Peer {
-  uuid?: string | undefined;
+  user?: string | undefined;
   meet?: string | undefined;
 
   conn: RTCPeerConnection;
@@ -20,6 +20,7 @@ export class PeerImpl implements Peer {
 
   uiState: PeerUiState;
 
+  receiveName?: string;
   receiveBuffer: ArrayBuffer[] = [];
   public receivedSize = 0;
 
@@ -35,7 +36,7 @@ export class PeerImpl implements Peer {
     this.conn = new RTCPeerConnection(configuration);
 
     this.stream = new MediaStream();
-    this.uuid = this.stream.id;
+    this.user = this.stream.id;
 
     this.events = new Map();
 
@@ -75,6 +76,10 @@ export class PeerImpl implements Peer {
     fileReader.onload = ({ target }: ProgressEvent<FileReader>) => {
       const result = target?.result as ArrayBuffer;
 
+      if (offset === 0) {
+        this.send(file.name);
+      }
+
       this.sendChannel.send(result);
 
       offset += result.byteLength;
@@ -92,56 +97,56 @@ export class PeerImpl implements Peer {
 
   async signalUp(): Promise<void> {
     await navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
+      .getUserMedia(this.getConfig())
       .then(this.gotStream());
 
     this.signaling.on('message', (message) => {
-      console.log(message);
-
-      this.getSignalMessage()(message)
+      this.getSignalMessage()(message);
     });
+  }
+
+  getConfig() {
+    let audio: string | Partial<MediaDeviceInfo> =
+      localStorage.getItem('audio') ?? 'true';
+    let video: string | Partial<MediaDeviceInfo> =
+      localStorage.getItem('video') ?? 'true';
+
+    if (audio) {
+      const { deviceId } = JSON.parse(audio as string);
+      audio = { deviceId };
+    }
+    if (video) {
+      const { deviceId } = JSON.parse(video as string);
+      video = { deviceId };
+    }
+
+    return { audio, video } as MediaStreamConstraints;
   }
 
   listen(): void {
     this.conn.onicecandidate = this.getIceCandidate();
 
     this.conn.ondatachannel = (evt) => {
-      console.log('%c--- RTC Data Channel Event ---', 'color: #FF9900');
-      console.log(evt);
-
       this.receiveChannel = evt.channel;
-      this.receiveChannel.onopen = (evt) => {
-        console.log('%c--- Receive Channel Open ---', 'color: #FF9900');
-        console.log(evt);
-      };
-
       this.receiveChannel.onmessage = (message) => {
-        console.log('%c--- Receive Message Event ---', 'color: #FF9900');
-        console.log(message instanceof ArrayBuffer);
-        if (typeof message === 'string') {
+        if (typeof message.data === 'string') {
+          this.receiveName = message.data;
           const event = this.events.get('data');
-          if (event) event(message);
+          if (event) event(message.data);
         }
 
-        if (typeof message === 'string') {
+        if (message.data instanceof ArrayBuffer) {
           this.onReceiveMessageCallback(message);
           const event = this.events.get('data');
-          if (event) event(message);
+          if (event) event(message.data);
         }
       };
     };
 
     this.sendChannel = this.conn.createDataChannel('sendDataChannel');
-    this.sendChannel.onopen = (evt) => {
-      console.log('%c--- Send Channel Open ---', 'color: #FF9900');
-      console.log(evt);
-
+    this.sendChannel.onopen = () => {
       const event = this.events.get('dataChannel');
       if (event) event(this.sendChannel);
-    };
-    this.sendChannel.onmessage = (message) => {
-      console.log('%c--- Send Message Event ---', 'color: #FF9900');
-      console.log(message);
     };
   }
 
@@ -158,12 +163,12 @@ export class PeerImpl implements Peer {
       this.remote = new MediaStream();
 
       this.conn.ontrack = ({ isTrusted, track }) => {
-        const onTrackEvent = this.events.get('track');
-        if (onTrackEvent) onTrackEvent(track);
-
         if (this.remote && isTrusted && track) {
           this.remote.addTrack(track);
         }
+
+        const onTrackEvent = this.events.get('track');
+        if (onTrackEvent) onTrackEvent(track);
       };
 
       this.conn
@@ -179,7 +184,7 @@ export class PeerImpl implements Peer {
         const message = {
           sdp: this.conn.localDescription,
           meet: this.meet,
-          uuid: this.uuid,
+          user: this.user,
         };
         this.signaling.emit('message', message);
       });
@@ -187,8 +192,8 @@ export class PeerImpl implements Peer {
   }
 
   getSignalMessage(): (message: SignalMessage) => void {
-    return ({ uuid, sdp, ice }) => {
-      if (uuid === this.uuid) {
+    return ({ user, sdp, ice }) => {
+      if (user === this.user) {
         return;
       }
 
@@ -205,12 +210,12 @@ export class PeerImpl implements Peer {
           })
           .catch(this.errorHandler);
       } else if (ice) {
-        const onCandidateEvent = this.events.get('iceCandidateChange');
-        if (onCandidateEvent) onCandidateEvent(ice);
-
         this.conn
           .addIceCandidate(new RTCIceCandidate(ice))
           .catch(this.errorHandler);
+
+        const onCandidateEvent = this.events.get('iceCandidateChange');
+        if (onCandidateEvent) onCandidateEvent(ice);
       }
     };
   }
@@ -224,7 +229,7 @@ export class PeerImpl implements Peer {
         const message = {
           ice: event.candidate,
           meet: this.meet,
-          uuid: this.uuid,
+          user: this.user,
         };
         this.signaling.emit('message', message);
       }
@@ -232,20 +237,23 @@ export class PeerImpl implements Peer {
   }
 
   onReceiveMessageCallback({ data }: MessageEvent<ArrayBuffer>): void {
-    console.log(`%c--- Received Message ${data.byteLength}`, 'color: #FF9900');
-
     this.receiveBuffer.push(data);
     this.receivedSize += data.byteLength;
 
     if (data.byteLength < 16384) {
       const received = new Blob(this.receiveBuffer);
+
       this.receiveBuffer = [];
       this.receivedSize = 0;
 
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(received);
-      link.download = `download.${received.type}`;
-      link.click();
+      if (this.receiveName) {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(received);
+        link.download = this.receiveName;
+        link.click();
+
+        delete this.receiveName;
+      }
     }
   }
 
@@ -263,7 +271,7 @@ export class PeerImpl implements Peer {
     this.uiState.video = !this.uiState.video;
   }
 
-  errorHandler(error: Event): void {
+  errorHandler(error: RTCPeerConnectionIceErrorEvent): void {
     console.error(error);
   }
 

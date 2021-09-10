@@ -1,0 +1,45 @@
+<mat-card id="remote">
+  <video autoplay playsinline [srcObject]="peer.remote"></video>
+</mat-card>
+
+<mat-card id="local" [ngClass]="{ videoff: peer.uiState.video }">
+  <video autoplay playsinline [muted]="true" [srcObject]="peer.stream"></video>
+
+  <mat-card-actions>
+    <button
+      type="button"
+      mat-icon-button
+      (click)="peer.toggleVideo(peer.stream)"
+    >
+      <mat-icon>
+        {{ peer.uiState.video ? 'videocam_off' : 'videocam' }}
+      </mat-icon>
+    </button>
+    <button
+      type="button"
+      mat-icon-button
+      (click)="peer.toggleAudio(peer.stream)"
+    >
+      <mat-icon>{{ peer.uiState.audio ? 'mic_off' : 'mic' }}</mat-icon>
+    </button>
+    <button
+      type="button"
+      mat-icon-button
+      (click)="inputFile.click()"
+    >
+      <mat-icon>upload</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>
+
+<input
+  #inputFile
+  type="file"
+  name="files"
+  [multiple]="false"
+  (change)="onFileChange($any($event.target).files)"
+/>
+
+<button mat-fab color="warn" (click)="end()">
+  <mat-icon>call_end</mat-icon>
+</button>

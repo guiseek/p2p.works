@@ -10,7 +10,7 @@ import { SignalingEvent, SignalMessage } from '@speek/ports';
 import { Server, Socket } from 'socket.io';
 
 
-@WebSocketGateway()
+@WebSocketGateway({ cors: true })
 export class SignalingGateway implements OnGatewayConnection {
   @WebSocketServer()
   private server: Server;
@@ -26,6 +26,8 @@ export class SignalingGateway implements OnGatewayConnection {
   ) {
     const room = this.takeOrStartRoom(payload);
     if (room.length >= 0 && room.length < 5) {
+      console.log(payload);
+      
       contact.emit(SignalingEvent.Available, true);
     } else {
       contact.emit(SignalingEvent.Available, false);
