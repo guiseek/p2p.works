@@ -30,6 +30,9 @@
     "adapters": {
       "tags": []
     },
+    "gateway": {
+      "tags": ["type:app", "side:server"]
+    },
     "ports": {
       "tags": []
     }
