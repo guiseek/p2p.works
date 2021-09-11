@@ -1,9 +1,8 @@
 :host {
   flex: 1;
+  margin: 20px;
   display: flex;
   align-items: center;
-  // justify-content: center;
-  margin: 10px;
   flex-direction: column;
 }
 
@@ -31,6 +30,15 @@
   }
 }
 
+.progress {
+  position: fixed;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
 video {
   width: 100%;
   max-width: 100%;
@@ -56,6 +64,7 @@ input[type='file'] {
 }
 
 .mat-card#remote {
+  border-radius: 8px 8px 28px 8px;
   object-fit: contain;
   width: 100%;
   flex: 1;

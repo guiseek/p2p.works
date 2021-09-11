@@ -19,9 +19,9 @@ export class HomeComponent implements OnInit {
   constructor(
     private _fb: FormBuilder,
     private _router: Router
-  ) {}
+  ) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     console.log(uuid());
 
     this.form.patchValue({ meet: uuid() });

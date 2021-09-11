@@ -1,5 +1,7 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -22,8 +24,10 @@ import { HomeComponent } from './home/home.component';
     MatInputModule,
     MatButtonModule,
     MatSelectModule,
+    HttpClientModule,
     MatFormFieldModule,
     ReactiveFormsModule,
+    MatAutocompleteModule,
     BrowserAnimationsModule,
     AppRoutingModule
   ],

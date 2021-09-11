@@ -3,7 +3,7 @@
 </mat-card>
 
 <mat-card id="local" [ngClass]="{ videoff: peer.uiState.video }">
-  <video autoplay playsinline [muted]="true" [srcObject]="peer.stream"></video>
+  <video autoplay playsinline [muted]="!!peer.stream" [srcObject]="peer.stream"></video>
 
   <canvas #audioCanvas height="15px"> </canvas>
 
@@ -47,9 +47,19 @@
   type="file"
   name="files"
   [multiple]="false"
-  (change)="onFileChange($any($event.target).files)"
+  (change)="peer.upload($any($event.target).files[0])"
 />
 
 <button mat-fab color="warn" (click)="end()">
   <mat-icon>call_end</mat-icon>
 </button>
+
+<ng-container *ngIf="(peer.progress$ | async) !== 0">
+  <div class="progress">
+    <mat-progress-spinner
+      color="primary"
+      mode="determinate"
+      [value]="peer.progress$ | async">
+    </mat-progress-spinner>
+  </div>
+</ng-container>

@@ -8,6 +8,7 @@ import {
   SignalMessage,
   Socket,
 } from '@works/ports';
+import { BehaviorSubject } from 'rxjs';
 
 export class PeerImpl implements Peer {
   user?: string | undefined;
@@ -20,9 +21,12 @@ export class PeerImpl implements Peer {
 
   uiState: PeerUiState;
 
-  receiveName?: string;
+  receiveMeta?: string;
   receiveBuffer: ArrayBuffer[] = [];
   public receivedSize = 0;
+  
+  private _progress = new BehaviorSubject<number>(0);
+  public progress$ = this._progress.asObservable();
 
   private receiveChannel!: RTCDataChannel;
   private sendChannel!: RTCDataChannel;
@@ -77,14 +81,21 @@ export class PeerImpl implements Peer {
       const result = target?.result as ArrayBuffer;
 
       if (offset === 0) {
-        this.send(file.name);
+        this.send(`${file.name};${file.size}`);
       }
 
       this.sendChannel.send(result);
 
       offset += result.byteLength;
 
-      if (offset < file.size) readSlice(offset);
+      const percentage = (offset / file.size) * 100;
+      this._progress.next(percentage);
+      
+      if (offset < file.size) {
+        readSlice(offset);
+      } else {
+        this._progress.next(0);
+      }
     };
 
     const readSlice = (o: number) => {
@@ -130,7 +141,7 @@ export class PeerImpl implements Peer {
       this.receiveChannel = evt.channel;
       this.receiveChannel.onmessage = (message) => {
         if (typeof message.data === 'string') {
-          this.receiveName = message.data;
+          this.receiveMeta = message.data;
           const event = this.events.get('data');
           if (event) event(message.data);
         }
@@ -243,20 +254,31 @@ export class PeerImpl implements Peer {
     this.receiveBuffer.push(data);
     this.receivedSize += data.byteLength;
 
+    let name = '';
+
+    if (this.receiveMeta) {
+      const meta = this.receiveMeta?.split(';');
+      const [filename, size] = meta ? meta : [];
+      const percentage = (this.receivedSize / +size) * 100;
+      this._progress.next(percentage);
+
+      name = filename;
+
+      
+    }
     if (data.byteLength < 16384) {
       const received = new Blob(this.receiveBuffer);
 
       this.receiveBuffer = [];
       this.receivedSize = 0;
 
-      if (this.receiveName) {
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(received);
-        link.download = this.receiveName;
-        link.click();
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(received);
+      link.download = name;
+      link.click();
 
-        delete this.receiveName;
-      }
+      delete this.receiveMeta;
+      this._progress.next(0);
     }
   }
 

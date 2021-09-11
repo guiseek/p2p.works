@@ -1,5 +1,7 @@
-import { PeerEventCallback, PeerEventMap, PeerEvent, Callback } from './types';
-import { SignalMessage, PeerUiState } from './interfaces';
+import { Observable } from 'rxjs';
+
+import { PeerUiState, SignalMessage } from './interfaces';
+import { Callback, PeerEvent, PeerEventCallback, PeerEventMap } from './types';
 
 export abstract class Peer {
   abstract uuid?: string;
@@ -14,6 +16,7 @@ export abstract class Peer {
 
   abstract receiveBuffer: ArrayBuffer[];
   public abstract receivedSize: number;
+  public abstract progress$: Observable<number>;
 
   abstract readonly events: PeerEventCallback<PeerEvent>;
 

@@ -36,6 +36,7 @@ $works-theme: mat.define-light-theme(
 @include mat.dialog-theme($works-theme);
 @include mat.button-theme($works-theme);
 @include mat.select-theme($works-theme);
+@include mat.progress-spinner-theme($works-theme);
 @include mat.form-field-theme($works-theme);
 
 html,

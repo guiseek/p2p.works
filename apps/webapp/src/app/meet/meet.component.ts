@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { drawOscilloscope } from '@works/adapters';
 import { Peer } from '@works/ports';
 
+
+
 @Component({
   selector: 'works-meet',
   templateUrl: './meet.component.html',
@@ -10,11 +12,11 @@ import { Peer } from '@works/ports';
 })
 export class MeetComponent implements OnInit, AfterViewInit {
   meet: string;
-
+  
   @ViewChild('audioCanvas')
   audioCanvasRef!: ElementRef<HTMLCanvasElement>;
   audioCanvas!: HTMLCanvasElement;
-
+  
   recorder!: MediaRecorder | null;
 
   constructor(
@@ -32,12 +34,8 @@ export class MeetComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log(this.audioCanvasRef);
     this.audioCanvas = this.audioCanvasRef.nativeElement;
-
-    this.peer.on('stream', (stream) => {
-      this.draw(stream);
-    });
+    this.peer.on('stream', (stream) => this.draw(stream));
   }
 
   async draw(stream: MediaStream) {
@@ -47,24 +45,11 @@ export class MeetComponent implements OnInit, AfterViewInit {
 
       const analyser = audioCtx.createAnalyser();
 
-      drawOscilloscope(this.audioCanvas, analyser);
+      const style = { fill: '#fff', stroke: '#00bb77' };
+      drawOscilloscope(this.audioCanvas, analyser, style);
 
       source.connect(analyser);
       analyser.connect(audioCtx.destination);
-    }
-  }
-
-  onConnect() {
-    this.peer.on('data', (data) => {
-      console.log(data);
-    });
-  }
-
-  onFileChange(files: FileList) {
-    const file = files.item(0);
-
-    if (file) {
-      this.peer.upload(file);
     }
   }
 
