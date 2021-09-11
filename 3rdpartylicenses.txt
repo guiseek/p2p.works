@@ -66,9 +66,9 @@ MIT
 @angular/router
 MIT
 
-@speek/adapters
+@works/adapters
 
-@speek/ports
+@works/ports
 
 backo2
 MIT
