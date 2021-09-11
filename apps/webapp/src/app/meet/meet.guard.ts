@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
-import { Signaling, SignalingEvent, SignalMessage, Socket } from '@speek/ports';
+import { Signaling, SignalingEvent, SignalMessage, Socket } from '@works/ports';
 import { Observable } from 'rxjs';
 
 import { ConfigComponent } from './config/config.component';

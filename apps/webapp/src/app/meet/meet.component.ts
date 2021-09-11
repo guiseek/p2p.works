@@ -1,10 +1,10 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { drawOscilloscope } from '@speek/adapters';
-import { Peer } from '@speek/ports';
+import { drawOscilloscope } from '@works/adapters';
+import { Peer } from '@works/ports';
 
 @Component({
-  selector: 'speek-meet',
+  selector: 'works-meet',
   templateUrl: './meet.component.html',
   styleUrls: ['./meet.component.scss'],
 })

@@ -20,7 +20,7 @@ import { HomeComponent } from './home/home.component';
             import('./meet/meet.module').then((m) => m.MeetModule),
         },
       ],
-      { initialNavigation: 'enabledBlocking' }
+      { useHash: true, initialNavigation: 'enabledBlocking' }
     )
   ]
 })

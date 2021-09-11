@@ -3,7 +3,7 @@ import { fromEvent, Subject, takeUntil, throttleTime } from 'rxjs';
 
 import { uuid } from '../../utils/uuid';
 
-export interface SpeekDraw {
+export interface WorksDraw {
   x0: number;
   y0: number;
   x1: number;
@@ -24,7 +24,7 @@ export type DrawEvent =
   | 'touchmove';
 
 @Component({
-  selector: 'speek-board',
+  selector: 'works-board',
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss'],
 })
@@ -32,12 +32,12 @@ export class BoardComponent implements AfterViewInit, OnDestroy {
   destroy = new Subject<void>();
 
   @Output()
-  draw = new EventEmitter<SpeekDraw>();
+  draw = new EventEmitter<WorksDraw>();
 
   sender = uuid();
   code!: string;
 
-  current: SpeekDraw = {
+  current: WorksDraw = {
     color: '#000000',
     x0: 0,
     y0: 0,
@@ -185,7 +185,7 @@ export class BoardComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  onDrawing = (data: SpeekDraw) => {
+  onDrawing = (data: WorksDraw) => {
     const w = this.canvas.width;
     const h = this.canvas.height;
     this.drawLine(

@@ -6,7 +6,7 @@ import { toJson, toText } from '../../utils/cast';
 import { someOneSelectedValidator } from './utils/some-one-selected.validator';
 
 @Component({
-  selector: 'speek-config',
+  selector: 'works-config',
   templateUrl: './config.component.html',
   styleUrls: ['./config.component.scss'],
 })

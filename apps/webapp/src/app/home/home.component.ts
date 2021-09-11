@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { uuid } from '../utils/uuid';
 
 @Component({
-  selector: 'speek-home',
+  selector: 'works-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })

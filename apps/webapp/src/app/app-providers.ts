@@ -1,5 +1,5 @@
-import { PeerImpl, SignalingImpl } from '@speek/adapters';
-import { Peer, Signaling, Socket } from '@speek/ports';
+import { PeerImpl, SignalingImpl } from '@works/adapters';
+import { Peer, Signaling, Socket } from '@works/ports';
 
 export class AppProviders {
   static forPorts({ signaling, iceServers }: {

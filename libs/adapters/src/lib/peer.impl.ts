@@ -7,7 +7,7 @@ import {
   Signaling,
   SignalMessage,
   Socket,
-} from '@speek/ports';
+} from '@works/ports';
 
 export class PeerImpl implements Peer {
   user?: string | undefined;

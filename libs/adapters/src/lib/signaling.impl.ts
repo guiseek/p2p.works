@@ -1,4 +1,4 @@
-import { Signaling, SignalMessage } from '@speek/ports';
+import { Signaling, SignalMessage } from '@works/ports';
 import { io, Socket } from 'socket.io-client';
 
 export class SignalingImpl implements Signaling<Socket> {

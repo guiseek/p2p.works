@@ -6,7 +6,7 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { SignalingEvent, SignalMessage } from '@speek/ports';
+import { SignalingEvent, SignalMessage } from '@works/ports';
 import { Server, Socket } from 'socket.io';
 
 

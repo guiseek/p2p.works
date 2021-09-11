@@ -10,33 +10,33 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$speek-primary: mat.define-palette(mat.$purple-palette);
-$speek-accent: mat.define-palette(mat.$cyan-palette);
+$works-primary: mat.define-palette(mat.$purple-palette);
+$works-accent: mat.define-palette(mat.$cyan-palette);
 // The warn palette is optional (defaults to red).
-$speek-warn: mat.define-palette(mat.$red-palette);
+$works-warn: mat.define-palette(mat.$red-palette);
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$speek-theme: mat.define-light-theme(
+$works-theme: mat.define-light-theme(
   (
     color: (
-      primary: $speek-primary,
-      accent: $speek-accent,
-      warn: $speek-warn,
+      primary: $works-primary,
+      accent: $works-accent,
+      warn: $works-warn,
     ),
   )
 );
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-// @include mat.all-component-themes($speek-theme);
-@include mat.core-theme($speek-theme);
-@include mat.icon-theme($speek-theme);
-@include mat.card-theme($speek-theme);
-@include mat.input-theme($speek-theme);
-@include mat.dialog-theme($speek-theme);
-@include mat.button-theme($speek-theme);
-@include mat.select-theme($speek-theme);
-@include mat.form-field-theme($speek-theme);
+// @include mat.all-component-themes($works-theme);
+@include mat.core-theme($works-theme);
+@include mat.icon-theme($works-theme);
+@include mat.card-theme($works-theme);
+@include mat.input-theme($works-theme);
+@include mat.dialog-theme($works-theme);
+@include mat.button-theme($works-theme);
+@include mat.select-theme($works-theme);
+@include mat.form-field-theme($works-theme);
 
 html,
 body {
