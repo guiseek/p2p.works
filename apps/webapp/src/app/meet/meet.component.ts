@@ -49,7 +49,7 @@ export class MeetComponent implements OnInit, AfterViewInit {
       drawOscilloscope(this.audioCanvas, analyser, style);
 
       source.connect(analyser);
-      analyser.connect(audioCtx.destination);
+      // analyser.connect(audioCtx.destination);
     }
   }
 
