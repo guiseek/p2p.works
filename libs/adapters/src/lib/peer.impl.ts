@@ -10,6 +10,12 @@ import {
 } from '@works/ports';
 import { BehaviorSubject } from 'rxjs';
 
+declare global {
+  interface MediaDevices {
+    getDisplayMedia(constraints: MediaStreamConstraints): Promise<MediaStream>
+  }
+}
+
 export class PeerImpl implements Peer {
   user?: string | undefined;
   meet?: string | undefined;
@@ -107,13 +113,29 @@ export class PeerImpl implements Peer {
   }
 
   async signalUp(): Promise<void> {
-    await navigator.mediaDevices
-      .getUserMedia(this.getConfig())
-      .then(this.gotStream());
+    const media = new MediaStream()
+    const audio = await navigator.mediaDevices.getUserMedia({ audio: true })
+    const video = await navigator.mediaDevices.getDisplayMedia({ video: true })
 
+    media.addTrack(audio.getAudioTracks()[0])
+    media.addTrack(video.getVideoTracks()[0])
+
+    this.gotStream()(media)
+
+    // await navigator.mediaDevices
+    //   // .getUserMedia(this.getConfig())
+    //   .getDisplayMedia({ video: true })
+    //   .then(this.gotStream());
+
+      
+      
     this.signaling.on('message', (message) => {
       this.getSignalMessage()(message);
     });
+  }
+
+  swap() {
+    // if ()
   }
 
   getConfig() {
@@ -175,6 +197,8 @@ export class PeerImpl implements Peer {
       this.conn.addTrack(audioTrack);
 
       this.remote = new MediaStream();
+
+      console.log(this.stream.getVideoTracks()[0].getSettings());
 
       this.conn.ontrack = ({ isTrusted, track }) => {
         if (this.remote && isTrusted && track) {
